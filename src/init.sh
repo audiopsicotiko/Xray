@@ -1,9 +1,9 @@
 #!/bin/bash
 
-author=233boy
-# github=https://github.com/233boy/xray
+author=audiopsicotiko
+# github=https://github.com/audiopsicotiko/xray
 
-# bash fonts colors
+# colores de fuentes bash
 red='\e[31m'
 yellow='\e[33m'
 gray='\e[90m'
@@ -34,8 +34,8 @@ _mkdir() {
     mkdir -p "$@"
 }
 
-is_err=$(_red_bg 错误!)
-is_warn=$(_red_bg 警告!)
+is_err=$(_red_bg Error!)
+is_warn=$(_red_bg Advertencia!)
 
 err() {
     echo -e "\n$is_err $@\n"
@@ -47,12 +47,12 @@ warn() {
     echo -e "\n$is_warn $@\n"
 }
 
-# load bash script.
+# cargar script bash.
 load() {
     . $is_sh_dir/src/$1
 }
 
-# wget add --no-check-certificate
+# wget agregar --no-check-certificate
 _wget() {
     # [[ $proxy ]] && export https_proxy=$proxy
     wget --no-check-certificate "$@"
@@ -72,7 +72,7 @@ amd64 | x86_64)
     caddy_arch="arm64"
     ;;
 *)
-    err "此脚本仅支持 64 位系统..."
+    err "Este script solo admite sistemas de 64 bits..."
     ;;
 esac
 
@@ -97,18 +97,18 @@ is_caddy_service=$(systemctl list-units --full -all | grep caddy.service)
 is_http_port=80
 is_https_port=443
 
-# core ver
+# versión core
 is_core_ver=$($is_core_bin version | head -n1 | cut -d " " -f1-2)
 
 if [[ $(pgrep -f $is_core_bin) ]]; then
-    is_core_status=$(_green running)
+    is_core_status=$(_green ejecutándose)
 else
-    is_core_status=$(_red_bg stopped)
+    is_core_status=$(_red_bg detenido)
     is_core_stop=1
 fi
 if [[ -f $is_caddy_bin && -d $is_caddy_dir && $is_caddy_service ]]; then
     is_caddy=1
-    # fix caddy run; ver >= 2.8.2
+    # corregir ejecución de caddy; ver >= 2.8.2
     [[ ! $(grep '\-\-adapter caddyfile' /lib/systemd/system/caddy.service) ]] && {
         load systemd.sh
         install_service caddy
@@ -120,9 +120,9 @@ if [[ -f $is_caddy_bin && -d $is_caddy_dir && $is_caddy_service ]]; then
     [[ $is_tmp_http_port ]] && is_http_port=$is_tmp_http_port
     [[ $is_tmp_https_port ]] && is_https_port=$is_tmp_https_port
     if [[ $(pgrep -f $is_caddy_bin) ]]; then
-        is_caddy_status=$(_green running)
+        is_caddy_status=$(_green ejecutándose)
     else
-        is_caddy_status=$(_red_bg stopped)
+        is_caddy_status=$(_red_bg detenido)
         is_caddy_stop=1
     fi
 fi
